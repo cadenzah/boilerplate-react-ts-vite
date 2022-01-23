@@ -1,8 +1,12 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, Suspense } from 'react';
 import { Routes as RouterSwitch, Route } from 'react-router-dom';
 
+interface IRouteComponent {
+    [key: string]: () => Promise<{ default: React.ComponentType }>
+}
+
 const PRESERVED = import.meta.globEager('/src/pages/(_app|404).tsx');
-const ROUTES = import.meta.globEager('/src/pages/**/[a-z[]*.tsx');
+const ROUTES = import.meta.glob('/src/pages/**/[a-z[]*.tsx') as IRouteComponent;
 
 interface IPreserved {
     [key: string]: React.ComponentType;
@@ -19,7 +23,7 @@ const routes = Object.keys(ROUTES).map((route) => {
         .replace(/\[\.{3}.+\]/, '*')
         .replace(/\[(.+)\]/, ':$1');
 
-    return { path, component: ROUTES[route].default };
+    return { path, component: React.lazy(ROUTES[route]) };
 });
 
 export default function Routes(): JSX.Element {
@@ -28,12 +32,14 @@ export default function Routes(): JSX.Element {
 
     return (
         <App>
-            <RouterSwitch>
-                {routes.map(({ path, component: Component = Fragment }) => (
-                    <Route key={path} path={path} element={<Component />} />
-                ))}
-                <Route path="*" element={<NotFound />} />
-            </RouterSwitch>
+            <Suspense fallback={'Loading...'}>
+                <RouterSwitch>
+                    {routes.map(({ path, component: Component = Fragment }) => (
+                        <Route key={path} path={path} element={<Component />} />
+                    ))}
+                    <Route path="*" element={<NotFound />} />
+                </RouterSwitch>
+            </Suspense>
         </App>
     );
 }
