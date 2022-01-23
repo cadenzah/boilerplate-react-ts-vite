@@ -1,7 +1,7 @@
 import React from 'react';
-import Navigation from '../components/Navigation';
+import Navigation from '@/components/Navigation';
 
-function Page(props: React.PropsWithChildren<{}>): JSX.Element {
+function Page(props: React.PropsWithChildren<Record<string, unknown>>): JSX.Element {
     const { children } = props;
     return (
         <div className="Page">

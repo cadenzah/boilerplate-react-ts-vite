@@ -1,20 +1,38 @@
 {
     "compilerOptions": {
+        /* Visit https://aka.ms/tsconfig.json to read more about this file */
+
+        /* Basic Options */
         "target": "ESNext",
         "useDefineForClassFields": true,
         "lib": ["DOM", "DOM.Iterable", "ESNext"],
         "allowJs": false,
-        "skipLibCheck": false,
-        "esModuleInterop": false,
-        "allowSyntheticDefaultImports": true,
+
+        /* Strict Type-Checking Options */
         "strict": true,
-        "forceConsistentCasingInFileNames": true,
+
+        /* Module Resolution Options */
         "module": "ESNext",
         "moduleResolution": "Node",
+        "esModuleInterop": false,
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": "./",
+        "paths": {
+            "@/*": ["src/*"],
+            "~/*": ["./*"]
+        },
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
-        "jsx": "react"
+        "jsx": "react",
+
+        /* Experimental Options */
+        "experimentalDecorators": false,        /* Enables experimental support for ES7 decorators. */
+        "emitDecoratorMetadata": false,         /* Enables experimental support for emitting type metadata for decorators. */
+
+        /* Advanced Options */
+        "skipLibCheck": false,
+        "forceConsistentCasingInFileNames": true
     },
     "include": ["./src"]
 }
