@@ -1,11 +1,11 @@
 import React from "react";
 
-function App(): JSX.Element {
+function Page(): JSX.Element {
     return (
-        <div className="App">
+        <div className="Page">
             <p>Hello, React with Vite!</p>
         </div>
     );
 }
 
-export default App;
+export default Page;
