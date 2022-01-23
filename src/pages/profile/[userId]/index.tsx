@@ -1,8 +1,8 @@
-import React from "react";
-import { useParams } from 'react-router-dom'
+import React from 'react';
+import { useParams } from 'react-router-dom';
 
 function Page(): JSX.Element {
-    const { userId } = useParams<{ userId: string }>()
+    const { userId } = useParams<{ userId: string }>();
 
     return (
         <div className="Page">
