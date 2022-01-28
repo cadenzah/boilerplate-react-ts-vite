@@ -7,7 +7,11 @@ function Page(props: React.PropsWithChildren<Record<string, unknown>>): JSX.Elem
     return (
         <div className="Page">
             <Navigation />
-            <CounterContainer />
+            {
+                [0, 1, 2].map((index) => (
+                    <CounterContainer key={index} idx={`${index}`} />
+                ))
+            }
             {children}
         </div>
     );

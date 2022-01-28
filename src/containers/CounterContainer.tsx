@@ -1,6 +1,6 @@
-import React, { useMemo, useCallback, useState } from 'react';
+import React, { useMemo, useCallback, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from '@/store';
-import appSlice, { makeSelectCount } from '@/store/app';
+import appSlice, { makeSelectCount, makeSelectCounterMap } from '@/store/app';
 
 import Counter from '@/components/Counter';
 
@@ -14,19 +14,40 @@ const convertInput = (value: string) => {
     return parseInt(value);
 };
 
-function CounterContainer(): JSX.Element {
+interface IProps {
+    idx: string;
+}
+
+function CounterContainer(props: IProps): JSX.Element {
+    const { idx } = props;
     const [offset, setOffset] = useState(DEFAULT_OFFSET);
-    const selectCount = useCallback((offset: number) => makeSelectCount(offset), [offset]);
-    const count = useSelector(selectCount(10));
     const dispatch = useDispatch();
 
-    const increment = useCallback(() => dispatch(actions.increment(offset)), [dispatch, offset]);
-    const decrement = useCallback(() => dispatch(actions.decrement(offset)), [dispatch, offset]);
+    const selectCounterMap = useMemo(() => makeSelectCounterMap(), []);
+    const counterMap = useSelector(selectCounterMap);
+    if (counterMap[idx] === undefined) {
+        dispatch(actions.init({ id: idx }));
+    }
+
+    const selectCount = useCallback((idx: string) => makeSelectCount(idx), []);
+    const count = useSelector(selectCount(idx));
+
+    const increment = useCallback(
+        () => dispatch(actions.increment({ id: idx, value: offset })),
+        [dispatch, idx, offset]
+    );
+    const decrement = useCallback(
+        () => dispatch(actions.decrement({ id: idx, value: offset })),
+        [dispatch, idx, offset]
+    );
 
     return (
         <div className="container">
             <Counter increment={() => increment()} decrement={() => decrement()} count={count} />
-            <input value={offset || DEFAULT_OFFSET} onChange={(e) => setOffset(convertInput(e.target.value))} />
+            <input
+                value={offset || DEFAULT_OFFSET}
+                onChange={(e) => setOffset(convertInput(e.target.value))}
+            />
         </div>
     );
 }
