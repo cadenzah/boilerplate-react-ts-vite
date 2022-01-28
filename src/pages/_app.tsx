@@ -2,13 +2,15 @@ import React from 'react';
 import Navigation from '@/components/Navigation';
 import CounterContainer from '@/containers/CounterContainer';
 
+const COUNTERS = Array.from({length: 5}, (v, i) => i);
+
 function Page(props: React.PropsWithChildren<Record<string, unknown>>): JSX.Element {
     const { children } = props;
     return (
         <div className="Page">
             <Navigation />
             {
-                [0, 1, 2].map((index) => (
+                COUNTERS.map((index) => (
                     <CounterContainer key={index} idx={`${index}`} />
                 ))
             }
