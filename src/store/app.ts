@@ -26,8 +26,8 @@ const forwardArgs = (_: RootState, args?: IArgs) => args;
 const selectAppSlice = (state: RootState) => state.app;
 const selectAppValue = createSelector([selectAppSlice], (app) => app.value);
 
-export const makeSelectCount = () => (
-    createSelector([selectAppValue, forwardArgs], (value, args = { offset: 0 }) => value + args.offset)
+export const makeSelectCount = (offset: number) => (
+    createSelector([selectAppValue, forwardArgs], (value) => value + offset)
 );
 
 export default appSlice;

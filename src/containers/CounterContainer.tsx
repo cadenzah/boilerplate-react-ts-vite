@@ -12,12 +12,12 @@ const convertInput = (value: string) => {
         return DEFAULT_OFFSET;
     }
     return parseInt(value);
-}
+};
 
 function CounterContainer(): JSX.Element {
     const [offset, setOffset] = useState(DEFAULT_OFFSET);
-    const selectCount = useMemo(makeSelectCount, []);
-    const count = useSelector(selectCount);
+    const selectCount = useCallback((offset: number) => makeSelectCount(offset), [offset]);
+    const count = useSelector(selectCount(10));
     const dispatch = useDispatch();
 
     const increment = useCallback(() => dispatch(actions.increment(offset)), [dispatch, offset]);
