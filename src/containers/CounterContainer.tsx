@@ -43,7 +43,11 @@ function CounterContainer(props: IProps): JSX.Element {
 
     return (
         <div className="container">
-            <Counter increment={() => increment()} decrement={() => decrement()} count={count} />
+            <Counter
+                increment={() => increment()}
+                decrement={() => decrement()}
+                count={count}
+            />
             <input
                 value={offset || DEFAULT_OFFSET}
                 onChange={(e) => setOffset(convertInput(e.target.value))}

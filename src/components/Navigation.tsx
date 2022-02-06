@@ -13,9 +13,7 @@ function Navigation(): JSX.Element {
         <div className="navigation">
             {Object.keys(MENUS).map((menu, index) => (
                 <li key={index}>
-                    <Link to={MENUS[menu]}>
-                        {menu}
-                    </Link>
+                    <Link to={MENUS[menu]}>{menu}</Link>
                 </li>
             ))}
         </div>

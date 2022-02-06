@@ -2,7 +2,7 @@ import React, { Fragment, Suspense } from 'react';
 import { Routes as RouterSwitch, Route } from 'react-router-dom';
 
 interface IRouteComponent {
-    [key: string]: () => Promise<{ default: React.ComponentType }>
+    [key: string]: () => Promise<{ default: React.ComponentType }>;
 }
 
 const PRESERVED = import.meta.globEager('/src/pages/(_app|404).tsx');
