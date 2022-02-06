@@ -7,7 +7,7 @@ interface ICounter {
     value: number;
 }
 interface ICounterMap {
-    [key: string]: ICounter
+    [key: string]: ICounter;
 }
 interface IState {
     counters: ICounterMap;
@@ -27,7 +27,7 @@ const appSlice = createSlice({
             const newCounters: ICounterMap = {
                 ...state.counters,
                 [id]: newCounter
-            }
+            };
             state.counters = newCounters;
         },
         increment: (state, { payload }) => {
@@ -36,28 +36,33 @@ const appSlice = createSlice({
         },
         decrement: (state, action) => {
             const { id } = action.payload;
-            state.counters[id].value = state.counters[id].value - action.payload.value;
+            state.counters[id].value =
+                state.counters[id].value - action.payload.value;
         }
     }
 });
 
 // selectors
-interface IArgs { [key: string]: any }
+interface IArgs {
+    [key: string]: unknown;
+}
 const forwardArgs = (_: RootState, args?: IArgs) => args;
 const selectAppSlice = (state: RootState) => state.app;
 
-const selectCounterMap = createSelector([selectAppSlice], (app) => app.counters);
-export const makeSelectCounterMap = () => createSelector([selectAppSlice], (app) => app.counters);
+const selectCounterMap = createSelector(
+    [selectAppSlice],
+    (app) => app.counters
+);
+export const makeSelectCounterMap = () =>
+    createSelector([selectAppSlice], (app) => app.counters);
 
-export const makeSelectCount =
-    (id: string) =>
-        (state: RootState) => (
-            createSelector(
-                [selectCounterMap, forwardArgs],
-                (counters, args = { id: '0' }) => (
-                    counters[args.id].value
-                )
-            )(state, { id })
-        );
+export const makeSelectCount = (id: string) => (state: RootState) =>
+    createSelector(
+        [selectCounterMap, forwardArgs],
+        (counters, args = { id: '0' }) => {
+            const id = args.id as string;
+            return counters[id].value;
+        }
+    )(state, { id });
 
 export default appSlice;
