@@ -8,7 +8,7 @@ import {
 import {
     configureStore,
     type StateFromReducersMapObject,
-    type DeepPartial
+    type PreloadedState
 } from '@reduxjs/toolkit';
 import appSlice from '@/store/app';
 
@@ -17,7 +17,7 @@ const reducer = {
 };
 
 export type RootState = StateFromReducersMapObject<typeof reducer>;
-export function initStore(preloadedState?: DeepPartial<RootState>) {
+export function initStore(preloadedState?: PreloadedState<RootState>) {
     return configureStore({
         reducer,
         preloadedState
