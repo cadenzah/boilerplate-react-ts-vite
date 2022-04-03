@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useAtom } from 'jotai';
+import { useUpdateAtom, useAtomValue } from 'jotai/utils';
 import { app } from '@/atoms';
 
 import Counter from '@/components/Counter';
@@ -12,7 +13,7 @@ const convertInput = (value: string) => {
     return parseInt(value);
 };
 
-const countersAtom = app.atoms.counters;
+const countersAtom = app.counters;
 
 interface IProps {
     idx: string;
@@ -23,12 +24,16 @@ function CounterContainer(props: IProps): JSX.Element {
     const [offset, setOffset] = useState(DEFAULT_OFFSET);
     // const dispatch = useDispatch();
     const [counterMap] = useAtom(countersAtom);
+    const initCounter = useUpdateAtom(app.initCounter(idx));
+    const increment = useUpdateAtom(app.increment({ id: idx, value: offset }));
+
 
     // const selectCounterMap = useMemo(() => makeSelectCounterMap(), []);
     // const counterMap = useSelector(selectCounterMap);
     if (counterMap[idx] === undefined) {
         // dispatch(actions.init({ id: idx }));
-        app.mutations.initCounter({ id: idx });
+        // app.initCounter({ id: idx });
+        initCounter();
         return (<></>);
     }
     console.log(counterMap[idx]);
@@ -45,15 +50,15 @@ function CounterContainer(props: IProps): JSX.Element {
     //     () => dispatch(actions.decrement({ id: idx, value: offset })),
     //     [dispatch, idx, offset]
     // );
-    const increment = useCallback(
-        () => {
-            app.mutations.increment({ id: idx, value: offset });
-        }, [app.mutations.increment, idx, offset]
-    );
+    // const increment = useCallback(
+    //     () => {
+    //         app.mutations.increment({ id: idx, value: offset });
+    //     }, [app.mutations.increment, idx, offset]
+    // );
     const decrement = useCallback(
         () => {
-            app.mutations.decrement({ id: idx, value: offset });
-        }, [app.mutations.decrement, idx, offset]
+            app.decrement({ id: idx, value: offset });
+        }, [app.decrement, idx, offset]
     );
 
     return (
