@@ -1,10 +1,8 @@
-import React, { useMemo, useCallback, useState } from 'react';
-import { useSelector, useDispatch } from '@/store';
-import appSlice, { makeSelectCount, makeSelectCounterMap } from '@/store/app';
+import React, { useState, useCallback } from 'react';
+import { useAtom } from 'jotai';
+import { app } from '@/atoms';
 
 import Counter from '@/components/Counter';
-
-const { actions } = appSlice;
 
 const DEFAULT_OFFSET = 1;
 const convertInput = (value: string) => {
@@ -14,6 +12,8 @@ const convertInput = (value: string) => {
     return parseInt(value);
 };
 
+const countersAtom = app.atoms.counters;
+
 interface IProps {
     idx: string;
 }
@@ -21,24 +21,39 @@ interface IProps {
 function CounterContainer(props: IProps): JSX.Element {
     const { idx } = props;
     const [offset, setOffset] = useState(DEFAULT_OFFSET);
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
+    const [counterMap] = useAtom(countersAtom);
 
-    const selectCounterMap = useMemo(() => makeSelectCounterMap(), []);
-    const counterMap = useSelector(selectCounterMap);
+    // const selectCounterMap = useMemo(() => makeSelectCounterMap(), []);
+    // const counterMap = useSelector(selectCounterMap);
     if (counterMap[idx] === undefined) {
-        dispatch(actions.init({ id: idx }));
+        // dispatch(actions.init({ id: idx }));
+        app.mutations.initCounter({ id: idx });
+        return (<></>);
     }
+    console.log(counterMap[idx]);
 
-    const selectCount = useCallback((idx: string) => makeSelectCount(idx), []);
-    const count = useSelector(selectCount(idx));
+    // const selectCount = useCallback((idx: string) => makeSelectCount(idx), []);
+    // const count = useSelector(selectCount(idx));
+    const count = counterMap[idx].value;
 
+    // const increment = useCallback(
+    //     () => dispatch(actions.increment({ id: idx, value: offset })),
+    //     [dispatch, idx, offset]
+    // );
+    // const decrement = useCallback(
+    //     () => dispatch(actions.decrement({ id: idx, value: offset })),
+    //     [dispatch, idx, offset]
+    // );
     const increment = useCallback(
-        () => dispatch(actions.increment({ id: idx, value: offset })),
-        [dispatch, idx, offset]
+        () => {
+            app.mutations.increment({ id: idx, value: offset });
+        }, [app.mutations.increment, idx, offset]
     );
     const decrement = useCallback(
-        () => dispatch(actions.decrement({ id: idx, value: offset })),
-        [dispatch, idx, offset]
+        () => {
+            app.mutations.decrement({ id: idx, value: offset });
+        }, [app.mutations.decrement, idx, offset]
     );
 
     return (
